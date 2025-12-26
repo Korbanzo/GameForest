@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="GameForest.vcxproj" Id="f9030af8-a9d6-48a5-9d4a-8ee616330438" />
+</Solution>

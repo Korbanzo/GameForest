@@ -1,0 +1,90 @@
+# ===============================
+# Visual Studio / C++ Specific
+# ===============================
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build results
+[Bb]in/
+[Oo]bj/
+Debug*/
+Release*/
+x64/
+x86/
+*.ilk
+*.pdb
+*.idb
+*.iobj
+*.ipdb
+*.exp
+
+# Visual Studio cache files
+*.VC.db
+*.VC.VC.opendb
+
+# Visual Studio temporary files
+*.tmp
+*.tmp_proj
+*.log
+
+# Auto-generated files
+*.tlog/
+*.lastbuildstate
+*.opensdf
+*.sdf
+*.cachefile
+*.ncb
+
+# ===============================
+# CMake (if used)
+# ===============================
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+build/
+
+# ===============================
+# Compiled object files
+# ===============================
+*.obj
+*.o
+*.so
+*.dll
+*.exe
+*.out
+*.lib
+*.a
+*.app
+
+# ===============================
+# Mac / Linux
+# ===============================
+*.DS_Store
+*.swp
+*~
+
+# ===============================
+# ImGui / Third-party libraries
+# ===============================
+# If you’re including ImGui source in your repo, DO NOT ignore it. Otherwise ignore:
+# imgui/
+# imgui/backends/
+
+# ===============================
+# JSON / Data files
+# ===============================
+# Include your saved JSON files if you want them in Git
+# If you want to ignore local saved games:
+games.json
+
+# ===============================
+# OneDrive / cloud backup folders
+# ===============================
+*.ini
+*.sln.docstates
+*.vs/
