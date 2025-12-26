@@ -108,7 +108,7 @@
       <AdditionalIncludeDirectories>;C:\libs\imgui;C:\libs\imgui\backends;C:\libs\imgui-1.92.5;C:\libs\imgui-1.92.5\backends</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
@@ -124,7 +124,7 @@
       <AdditionalIncludeDirectories>C:\libs\imgui\backends;C:\libs\imgui;%(AdditionalIncludeDirectories);C:\libs\imgui;C:\libs\imgui\backends;C:\libs\imgui-1.92.5;C:\libs\imgui-1.92.5\backends</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>d3d11.lib;dxgi.lib;d3dcompiler.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
