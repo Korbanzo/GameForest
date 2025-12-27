@@ -352,6 +352,7 @@ int main(int, char**)
             for (auto& game : games) {
                 if (ImGui::Button(game.name.c_str())) {
                     openGame(game.path);
+                    done = true;
                 }
             }
         }
