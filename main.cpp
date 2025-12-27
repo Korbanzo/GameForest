@@ -18,12 +18,14 @@ ADD
 #include "imgui_impl_dx11.h"
 #include <d3d11.h>
 #include <tchar.h>
+#include <shobjidl.h> 
 #include <iostream>
 #include <wrl/client.h>
 #include <filesystem>
 #include <fstream>
 #include <vector>
 #include <nlohmann/json.hpp>
+
 
 using json = nlohmann::json;
 
@@ -202,6 +204,68 @@ void loadGames(std::vector<Game>& games) {
     }
 }
 
+void addGameData(char* pathToExe) {
+    std::string path = pathToExe;
+    formatPathStr(path);
+
+    std::filesystem::path fileSystemPath(path);
+
+    if (path.ends_with(".exe") && std::filesystem::exists(fileSystemPath) && isUniqueGame(games, path)) {
+        games.push_back({ getGameName(path), path });
+        saveGames(games);
+    }
+
+    memset(pathToExe, 0, sizeof(pathToExe));
+}
+
+void fileSelector() {
+    // File object instance
+    HRESULT f_SysHr = CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
+    if (FAILED(f_SysHr)) { return; }
+
+    // FileOpenDialog Object
+    IFileOpenDialog* f_FileSystem;
+    f_SysHr = CoCreateInstance(CLSID_FileOpenDialog, nullptr, CLSCTX_ALL, IID_IFileOpenDialog, reinterpret_cast<void**>(&f_FileSystem));
+    if (FAILED(f_SysHr)) {
+        CoUninitialize();
+        return;
+    }
+
+    // Show Open File Dialog Window
+    f_SysHr = f_FileSystem->Show(nullptr);
+    if (FAILED(f_SysHr)) {
+        f_FileSystem->Release();
+        CoUninitialize();
+        return;
+    }
+
+    // File Name
+    IShellItem* f_Files;
+    f_SysHr = f_FileSystem->GetResult(&f_Files);
+    if (FAILED(f_SysHr)) {
+        f_FileSystem->Release();
+        CoUninitialize();
+        return;
+    }
+
+    PWSTR f_Path;
+    f_SysHr = f_Files->GetDisplayName(SIGDN_FILESYSPATH, &f_Path);
+    if (FAILED(f_SysHr)) {
+        f_Files->Release();
+        f_FileSystem->Release();
+        CoUninitialize();
+        return;
+    }
+    
+    // Store File Path 
+    std::wstring newPath(f_Path);
+    std::string c(newPath.begin(), newPath.end());
+
+    addGameData(c.data());
+}
+
+
+
 // Main code
 int main(int, char**)
 {
@@ -280,6 +344,7 @@ int main(int, char**)
 
     char pathToExe[maxPathLength] = {};
     bool showPathToExe = false;
+    bool showChooseFileButton = false;
 
     loadGames(games);
 
@@ -326,27 +391,23 @@ int main(int, char**)
 
             if (ImGui::Button("Add Game", ImVec2{ 0, 0 })) {
                 showPathToExe = !showPathToExe;
+                showChooseFileButton = !showChooseFileButton;
 
                 if (!showPathToExe && strlen(pathToExe) > 0) {
-                    std::string path = pathToExe;
-                    formatPathStr(path);
-
-                    std::filesystem::path fileSystemPath(path);
-
-                    if (path.ends_with(".exe") && std::filesystem::exists(fileSystemPath) && isUniqueGame(games, path)) {
-                        games.push_back({ getGameName(path), path });
-                        saveGames(games);
-                    }
-
-                    memset(pathToExe, 0, sizeof(pathToExe));
+                    addGameData(pathToExe);
                 }
             }
 
             std::string gamesInstalledText = std::format("{} Games Installed", games.size());
-            ImGui::Text(gamesInstalledText.c_str(), ImVec2{ 0 , 30 });
+            
+            ImGui::Text(gamesInstalledText.c_str());
 
             if (showPathToExe) {
                 ImGui::InputText("Path to .exe", pathToExe, IM_ARRAYSIZE(pathToExe));
+            }
+
+            if (showChooseFileButton && ImGui::Button("Select File")) {
+                fileSelector();
             }
 
             for (auto& game : games) {
